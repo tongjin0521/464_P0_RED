@@ -50,7 +50,7 @@ class HelloJoyApp( JoyApp ):
     progress("----------")
     
     offset_1 = 200
-    offset_2 = 600
+    offset_2 = 200
     progress("10 pos: "+str(self.nx10_pos))
     progress("17 pos: "+str(self.nx17_pos))
     if (evt.type == KEYDOWN):
