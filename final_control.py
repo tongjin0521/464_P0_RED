@@ -21,37 +21,35 @@ from joy import *
 import ckbot
 import time 
 
-RESET_FRONT_ANGLE = 5000
+RESET_FRONT_ANGLE = 6100
 RESET_BACK_ANGLE = 0
-RESET_FRONT_STEP_SIZE = 100
-RESET_BACK_STEP_SIZE = 40
+RESET_FRONT_STEP_SIZE = 160
+RESET_BACK_STEP_SIZE = 56
 
 MANUAL_FRONT_STEP_SIZE = 400
 MANUAL_BACK_STEP_SIZE = 400
 
 LEFT_TURN_RESET_ANGLE = 0
 LEFT_TURN_START_ANGLE = 0
-LEFT_TURN_END_ANGLE = -2200
-LEFT_TURN_STEP_SIZE = 50
+LEFT_TURN_END_ANGLE = -1600
+LEFT_TURN_STEP_SIZE = 56
 
 RIGHT_TURN_RESET_ANGLE = 0
 RIGHT_TURN_START_ANGLE = 0
-RIGHT_TURN_END_ANGLE = 2200
-RIGHT_TURN_STEP_SIZE = 50
+RIGHT_TURN_END_ANGLE = 1600
+RIGHT_TURN_STEP_SIZE = 56
 
 FORWARD_REST_ANGLE = RESET_FRONT_ANGLE
 FORWARD_START_ANGLE = RESET_FRONT_ANGLE
-FORWARD_END_ANGLE = -3500
-FORWARD_STEP_SIZE = 100
+FORWARD_END_ANGLE = -1600
+FORWARD_STEP_SIZE = 130
 
 LIFT_RESET_ANGLE = RESET_FRONT_ANGLE
 LIFT_START_ANGLE = RESET_FRONT_ANGLE
-LIFT_END_ANGLE =  1800
-LIFT_STEP_SIZE = 100
+LIFT_END_ANGLE = 2000
+LIFT_STEP_SIZE = 150
 
-# TODO: 
-# 1. TRY MOVING SLOWLY WHEN RESETING
-# 2. TRY SIN FUNC WHEN MOVING
+
 def angle_limit_check(input_angle):
     if (input_angle > 9700):
       return 9700
@@ -70,6 +68,7 @@ class Motion (Plan):
         self.servo = servo
         self.loop = loop
         self.increase = -1
+        self.app = app
 
     def change_pos(self):
         if self.loop:
@@ -94,11 +93,16 @@ class Motion (Plan):
             while (abs(self.current_pos - self.end_pos) > self.step_size):
                 print(self.current_pos)
                 self.change_pos()
+            yield
             self.stop()
 
     def onStop(self):
         if self.loop:
             self.servo.set_pos(angle_limit_check(self.reset_pos))
+        else:
+            
+            if self.end_pos == LEFT_TURN_END_ANGLE or self.end_pos == RIGHT_TURN_END_ANGLE:
+                self.app.reset_mode()
     
     def onStart(self):
         self.servo.set_pos(angle_limit_check(self.start_pos))
@@ -135,9 +139,8 @@ class P0App( JoyApp ):
         while abs(curr_angle_back - RESET_BACK_ANGLE) > RESET_BACK_STEP_SIZE:
             self.back.set_pos(angle_limit_check(curr_angle_back + back_increase*RESET_BACK_STEP_SIZE))
             curr_angle_back = angle_limit_check(curr_angle_back + back_increase*RESET_BACK_STEP_SIZE)
-
+    
     def onStart(self):
-        self.reset_mode()
         progress("Started program")
 
     def onEvent(self,evt):
@@ -156,21 +159,28 @@ class P0App( JoyApp ):
         if evt.key == K_LEFT:
             progress("KEY: LEFT")
             self.forward.stop()
+            self.turn_right.start()
             self.lift.start()
-            # time.sleep(10)
+            
             self.turn_left.start()
+
+            # self.reset_mode()
 
 
         elif evt.key == K_RIGHT:
             progress("KEY: RIGHT")
             self.forward.stop()
+            self.turn_left.start()
             self.lift.start() 
-            # time.sleep(0.5)
+            
             self.turn_right.start()
+
+            # self.reset_mode()
 
         elif evt.key == K_UP:
             # go forward (up arrow)
             progress("KEY: UP")
+            # self.back.set_pos(-1000)
             self.forward.start()
 
         elif evt.key ==K_DOWN:

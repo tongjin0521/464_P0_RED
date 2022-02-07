@@ -49,8 +49,8 @@ class HelloJoyApp( JoyApp ):
   def onEvent(self,evt):
     progress("----------")
     
-    offset_1 = 200
-    offset_2 = 200
+    offset_1 = 500
+    offset_2 = 500
     progress("10 pos: "+str(self.nx10_pos))
     progress("17 pos: "+str(self.nx17_pos))
     if (evt.type == KEYDOWN):
