@@ -1,7 +1,9 @@
 '''
-FILE demo-helloJoy.py
+FILE manual_control.py
 
-This demonstrates basic joyapp programming and it converts your mouse postion to y-value and prints it on your screen
+This is a file we use to manually control the movements of the motors and keep a record of the positions when we are testing our initial designs.
+When running this file, it will create an app called HelloJoyApp. 
+For different keyboard inputs, it will increase or decrease the motor's position and print their positions in real-time.
 '''
 from joy.decl import *
 from joy import JoyApp
