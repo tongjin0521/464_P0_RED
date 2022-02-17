@@ -1,18 +1,16 @@
 #!/usr/bin/env python
 
 '''
-FILE RobotDriver.py
+final_control.py
 
-This file is used to control a robot with three servos. It is meant for a
-configuration with three servos in a straight line. The front servo has a
-leg on the left side, the middle servo has a leg on the right side, and the
-rear servo has legs on both sides.
-
-To move forward, both the front and middle servos are used in tandem. To turn
-left, the middle servo is used and to turn right the front servo is used.
-
-The rear servo is used to move backwards and is positioned the opposite direction
-of the front two servos.
+This is the final and only python file we used during the competition. 
+When running, it will start and run an app called P0App(), which controls the whole running process.
+Inside P0App(), we created four Motion () instances: forward, turn_left, turn_right, and lift.
+Motion() is a subclass of Plan that helps us control motions, including continuous motions, like forward, or one-time motion, like turn_left and turn_right.
+Motion() takes six inputs as (1)app: P0App(); (2)servo: the servo we want to control; (3)start_pos: the position we want the motor to start; (4)end_pos: the position we want the motor to end; (5)step_size: how large a step we want to move for each while loop; (6)reset_pos: the position we want the motor to be at when we end the movement; (7) loop: whether we want the movement to be continuous or just one-time. 
+Inside P0App(), we also have a function called reset_mode, which helps us reset the motors to their reset positions.
+P0App() will take keyboard input and correspondingly run certain predefined motions when P0App() is initialized. The details on how to control it is listed in the USAGE.txt.
+ 
 '''
 from joy.plans import Plan
 from joy.decl import *
