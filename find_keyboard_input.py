@@ -1,5 +1,7 @@
 '''
-FILE demo-helloJoy.py
+FILE find_keyboard_input.py
+
+This is just a simple file for us to know the keyboard input type and key by running a simple JoyApp.
 
 This demonstrates basic joyapp programming and it converts your mouse postion to y-value and prints it on your screen
 '''
